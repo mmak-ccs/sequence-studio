@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123a46">
+<title>Sequence Studio | 中一數列探索室</title>
+<style>
+:root {
+  --ink:#173540; --muted:#536b73; --paper:#f3f7f7; --card:#fff;
+  --teal:#087f80; --teal-light:#e2f5f1; --orange:#f4af46;
+  --purple:#6553a5; --line:#d7e3e5; --danger:#a33237;
+  --shadow:0 12px 35px #1735400c;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; background:var(--paper); color:var(--ink);
+  font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+button,input,select,textarea { font:inherit; }
+button,a,input,select,textarea { -webkit-tap-highlight-color:transparent; }
+button {
+  border:0; border-radius:11px; padding:10px 17px; cursor:pointer;
+  background:var(--teal); color:white; font-weight:700; min-height:44px;
+}
+button:hover { filter:brightness(.94); }
+button:disabled { opacity:.48; cursor:not-allowed; }
+button.secondary {
+  background:white; color:var(--ink); border:1px solid var(--line);
+}
+button.danger { background:#fff0f0; color:var(--danger); }
+:focus-visible { outline:3px solid var(--purple); outline-offset:4px; }
+a { color:#006b70; text-underline-offset:3px; }
+h1,h2,h3 { line-height:1.2; }
+h1 { font-size:clamp(2rem,5vw,3.5rem); margin:12px 0; letter-spacing:-.04em; }
+h2 { font-size:1.6rem; margin:0 0 15px; }
+h3 { font-size:1.1rem; }
+p { margin:10px 0 16px; }
+small,.muted { color:var(--muted); }
+[hidden] { display:none !important; }
+.wrap { max-width:1150px; margin:auto; padding:0 22px; }
+.hero {
+  color:white; background:
+  radial-gradient(circle at 85% 20%,#297a7966,transparent 35%),#123a46;
+  padding:38px 0 32px;
+}
+.hero p { color:#d6e7e9; max-width:740px; }
+.eyebrow { font-weight:800; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; }
+.pills,.row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.pill { padding:5px 12px; border-radius:30px; font-size:.8rem; background:#ffffff18; }
+nav {
+  display:flex; gap:8px; flex-wrap:wrap; padding:20px 0;
+}
+nav button { background:white; color:var(--ink); border:1px solid var(--line); }
+nav button[aria-pressed="true"] { background:var(--ink); color:white; }
+main { padding-bottom:35px; }
+.grid { display:grid; grid-template-columns:1.25fr 1fr; gap:20px; }
+.card {
+  background:var(--card); border:1px solid var(--line);
+  border-radius:20px; padding:24px; box-shadow:var(--shadow); margin-bottom:20px;
+}
+.tag {
+  display:inline-block; padding:4px 9px; border-radius:7px;
+  color:#075f62; background:var(--teal-light);
+  font-size:.75rem; font-weight:800; margin-bottom:12px;
+}
+.tag.extra { color:#514185; background:#eee9fb; }
+label { display:block; font-weight:650; margin:12px 0 5px; }
+input:not([type="range"]),select,textarea {
+  width:100%; padding:10px 12px; border:1px solid #aebfc3;
+  border-radius:10px; color:var(--ink); background:white; min-height:44px;
+}
+input[type="range"] { width:100%; accent-color:var(--teal); }
+textarea { resize:vertical; min-height:95px; }
+.field { flex:1; min-width:140px; }
+.controls { display:flex; flex-wrap:wrap; gap:12px; align-items:end; }
+.controls button { margin-top:14px; }
+.visual {
+  background:linear-gradient(145deg,#edf8f5,#f8fafc);
+  border:1px solid var(--line); border-radius:16px;
+  padding:12px; margin:18px 0;
+}
+svg { display:block; width:100%; height:auto; }
+svg text { font-family:system-ui,sans-serif; fill:var(--ink); }
+.metric { font-size:2rem; font-weight:850; line-height:1.1; }
+.metric small { font-size:.8rem; font-weight:500; display:block; margin-top:7px; }
+.callout { border-left:4px solid var(--teal); background:#eef8f6; padding:13px 16px; border-radius:0 10px 10px 0; }
+.warn { border-left-color:var(--orange); background:#fff7e8; }
+.feedback { padding:12px 0; min-height:48px; font-weight:650; }
+.feedback.good { color:#066448; }
+.feedback.bad { color:var(--danger); }
+.tablewrap { overflow:auto; max-height:340px; border:1px solid var(--line); border-radius:12px; margin-top:14px; }
+table { width:100%; border-collapse:collapse; font-size:.9rem; }
+caption { text-align:left; padding:10px; font-weight:700; }
+th,td { padding:9px 12px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap; }
+th { background:#edf3f4; }
+tbody tr:last-child td { border-bottom:0; }
+details { margin:16px 0; }
+summary { cursor:pointer; font-weight:750; padding:8px 0; }
+.termstrip { display:flex; gap:8px; flex-wrap:wrap; margin:15px 0; }
+.termchip { background:#edf3f4; border-radius:10px; padding:9px 13px; text-align:center; }
+.termchip small { display:block; }
+.formula { font-size:1.22rem; font-weight:750; }
+progress { width:100%; height:15px; accent-color:var(--teal); }
+.questions { font-size:1.3rem; margin:20px 0; }
+.notebook { background:#fffefa; }
+footer { border-top:1px solid var(--line); padding:20px 0 30px; font-size:.85rem; }
+.skip { position:absolute; left:-9999px; }
+.skip:focus { left:10px; top:10px; background:white; padding:10px; z-index:10; }
+#storageStatus { font-size:.85rem; }
+@media(max-width:760px) {
+  .grid { grid-template-columns:1fr; }
+  .wrap { padding:0 14px; }
+  .card { padding:18px; }
+  nav button { flex:1 1 40%; font-size:.9rem; }
+  .hero { padding-top:26px; }
+}
+@media(prefers-reduced-motion:no-preference) {
+  button { transition:background .15s,filter .15s; }
+}
+@media print {
+  .hero,nav,footer,button,.no-print { display:none !important; }
+  body { background:white; font-size:11pt; }
+  .wrap { max-width:none; }
+  .card { box-shadow:none; break-inside:avoid; }
+  .grid { display:block; }
+  .tablewrap { max-height:none; overflow:visible; }
+  textarea { min-height:130px; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to activities</a>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Hong Kong • Secondary 1 Mathematics</div>
+    <h1>Sequence Studio<span style="color:#7ce0c5">.</span></h1>
+    <p>中一數列探索室 — See a pattern. Explain a rule. Test an idea.</p>
+    <div class="pills">
+      <span class="pill">01 / Visualise</span>
+      <span class="pill">02 / Experiment</span>
+      <span class="pill">03 / Practise</span>
+      <span class="pill">04 / Investigate</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav aria-label="Learning areas">
+    <button data-page="patterns" aria-pressed="true" aria-controls="patterns">01 Visual patterns</button>
+    <button data-page="lab" aria-pressed="false" aria-controls="lab">02 Sequence lab</button>
+    <button data-page="practice" aria-pressed="false" aria-controls="practice">03 Practice</button>
+    <button data-page="research" aria-pressed="false" aria-controls="research">04 Research corner</button>
+  </nav>
+
+  <main id="main">
+    <noscript><p class="callout warn">Please enable JavaScript to use these activities.</p></noscript>
+
+    <section id="patterns" aria-labelledby="patternsTitle">
+      <div class="grid">
+        <article class="card">
+          <span class="tag">START HERE / 核心概念</span>
+          <h2 id="patternsTitle" tabindex="-1">Make the pattern grow</h2>
+          <p>A sequence is an ordered list of terms.
+            <strong>n</strong> tells us the position; <strong>a<sub>n</sub></strong>
+            tells us the value at that position. Here, positions begin at 1.</p>
+
+          <label for="patternKind">Choose a pattern / 選擇圖案</label>
+          <select id="patternKind">
+            <option value="linear">Tile teams: three per team, plus one</option>
+            <option value="odd">Odd numbers / 奇數</option>
+            <option value="even">Even numbers / 偶數</option>
+            <option value="square">Square numbers / 平方數</option>
+            <option value="triangle">Triangular numbers / 三角形數</option>
+          </select>
+
+          <div class="row" style="justify-content:space-between;margin-top:22px">
+            <div class="metric"><span id="position">4</span><small>position n / 項數位置</small></div>
+            <div class="metric"><span id="tileCount">13</span><small>term value aₙ / 項的值</small></div>
+          </div>
+
+          <label for="stage">Move through positions 1–10</label>
+          <input id="stage" type="range" min="1" max="10" value="4">
+          <div class="row">
+            <button id="previousStage" class="secondary" aria-label="Previous position">− One step</button>
+            <button id="nextStage" class="secondary" aria-label="Next position">+ One step</button>
+          </div>
+
+          <div class="visual">
+            <svg id="patternSvg" viewBox="0 0 520 310" role="img" aria-label="Growing tile pattern"></svg>
+          </div>
+          <p id="growthDescription" class="muted"></p>
+          <small>Orange tiles with a dark outline are new compared with the preceding picture.</small>
+          <div id="firstTerms" class="termstrip"></div>
+        </article>
+
+        <div>
+          <article class="card">
+            <span class="tag">PREDICT → CHECK → EXPLAIN</span>
+            <h2>Your pattern mission</h2>
+            <ol>
+              <li>Compare positions 2, 3 and 4. What changes? What stays the same?</li>
+              <li>Predict the value at position 8 before moving the slider there.</li>
+              <li>Explain how you could find position 20 without drawing every tile.</li>
+            </ol>
+            <form id="predictionForm">
+              <label for="prediction">My prediction for a₈</label>
+              <input id="prediction" type="number" step="1" required autocomplete="off">
+              <button type="submit" style="margin-top:12px">Check prediction</button>
+            </form>
+            <div id="predictionFeedback" class="feedback" role="status"></div>
+
+            <details id="ruleDetails">
+              <summary>Reveal the rule and a visual explanation</summary>
+              <p id="patternRule" class="formula"></p>
+              <p id="patternExplanation"></p>
+              <p id="position20"></p>
+            </details>
+          </article>
+
+          <article class="card">
+            <h3>Two different kinds of rule</h3>
+            <p><strong>Term-to-term:</strong> how to move from one term to the next.</p>
+            <p><strong>Position-to-term / 通項:</strong> how to calculate a term directly from its position.</p>
+            <div class="callout warn">
+              <strong>A few terms do not determine a unique sequence.</strong>
+              For 1, 2, 4, one possible next term is 8 if we double.
+              Another is 7 if we add 1, then 2, then 3.
+              Always explain your assumed rule.
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="lab" hidden aria-labelledby="labTitle">
+      <article class="card">
+        <span class="tag extra">SENIOR-SECONDARY BRIDGE / 延伸</span>
+        <h2 id="labTitle" tabindex="-1">Be a sequence designer</h2>
+        <p>Keep the first term fixed. Compare <strong>adding the same number</strong>
+          with <strong>multiplying by the same number</strong>.</p>
+        <form id="labForm">
+          <div class="controls">
+            <div class="field">
+              <label for="labMode">Rule family</label>
+              <select id="labMode">
+                <option value="arithmetic">Arithmetic / 等差 — add d</option>
+                <option value="geometric">Geometric / 等比 — multiply by r</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="firstTerm">First term a₁ (1–20)</label>
+              <input id="firstTerm" type="number" min="1" max="20" step="1" value="2" required>
+            </div>
+            <div class="field" id="differenceField">
+              <label for="difference">Difference d (−10 to 10)</label>
+              <input id="difference" type="number" min="-10" max="10" step="1" value="3" required>
+            </div>
+            <div class="field" id="ratioField" hidden>
+              <label for="ratio">Multiplier r</label>
+              <select id="ratio">
+                <option value="-2">−2</option>
+                <option value="-1">−1</option>
+                <option value="0.5">0.5</option>
+                <option value="1">1</option>
+                <option value="1.5">1.5</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+            <button type="submit">Generate 10 terms</button>
+          </div>
+        </form>
+      </article>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Displayed experiment</h3>
+          <p id="labSummary" class="callout"></p>
+          <div class="visual">
+            <svg id="labChart" viewBox="0 0 620 300" role="img" aria-label="Sequence graph"></svg>
+          </div>
+          <small>Horizontal axis: position n. Each dot is a term.
+            Connecting lines are visual guides, not extra terms. Vertical scales change between experiments.</small>
+          <div id="labTable" class="tablewrap"></div>
+          <button id="labDownload" class="secondary" style="margin-top:14px">Download displayed data (.csv)</button>
+        </article>
+
+        <article class="card">
+          <h3>Experiment cards</h3>
+          <ol>
+            <li><strong>Growing:</strong> Start at 2 and add 3. Explain why a₁₀ is not 2 + 10 × 3.</li>
+            <li><strong>Decreasing:</strong> Start at 10 and add −2. At which position is the term zero?</li>
+            <li><strong>Constant:</strong> Try d = 0, then r = 1. What stays unchanged?</li>
+            <li><strong>Alternating:</strong> Start at 2 and multiply by −2. Describe the signs.</li>
+            <li><strong>Shrinking:</strong> Start at 16 and multiply by 0.5. Does a displayed small value mean the term is exactly zero?</li>
+          </ol>
+          <details>
+            <summary>Senior bridge: general terms and sums</summary>
+            <p class="formula">Arithmetic: aₙ = a₁ + (n − 1)d</p>
+            <p>There are n − 1 jumps from the first term to the nth term.</p>
+            <p class="formula">Geometric: aₙ = a₁ × rⁿ⁻¹</p>
+            <p>There are n − 1 multiplications.</p>
+            <p>Arithmetic sum: Sₙ = n(a₁ + aₙ)/2.</p>
+            <p>Geometric sum: Sₙ = a₁(1 − rⁿ)/(1 − r), when r ≠ 1.
+              When r = 1, Sₙ = na₁.</p>
+            <p id="labSum"></p>
+          </details>
+          <div class="callout">
+            <strong>Mini-investigation:</strong> With a₁ = 2, compare “add 3”
+            and “multiply by 2”. Find the first position where the second
+            sequence is larger. Explain using a table, not just the graph.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="practice" hidden aria-labelledby="practiceTitle">
+      <div class="grid">
+        <article class="card">
+          <span class="tag">LOW-STAKES PRACTICE / 小試牛刀</span>
+          <h2 id="practiceTitle" tabindex="-1">Explain it to yourself</h2>
+          <p id="quizProgress"></p>
+          <progress id="quizBar" max="6" value="0" aria-label="Questions completed"></progress>
+          <p id="quizQuestion" class="questions"></p>
+
+          <form id="quizForm">
+            <label for="quizAnswer">Your numerical answer</label>
+            <input id="quizAnswer" type="number" step="any" required autocomplete="off">
+            <div class="row" style="margin-top:14px">
+              <button id="quizCheck" type="submit">Check</button>
+              <button id="quizHint" type="button" class="secondary">Hint</button>
+              <button id="quizReveal" type="button" class="secondary">Show solution</button>
+            </div>
+          </form>
+
+          <div id="quizFeedback" class="feedback" role="status"></div>
+          <p id="quizHintText" class="callout" hidden></p>
+          <button id="quizNext" disabled>Next question →</button>
+          <button id="quizRestart" class="secondary" hidden>Start a new set</button>
+        </article>
+
+        <article class="card">
+          <h3>Success checklist</h3>
+          <ul>
+            <li>I can distinguish a position from a term value.</li>
+            <li>I can describe a term-to-term rule.</li>
+            <li>I can substitute n into a given formula.</li>
+            <li>I remember that n = 1 gives the first term.</li>
+            <li>I can explain an answer instead of only guessing.</li>
+          </ul>
+          <p class="callout warn">
+            The score counts correct first submissions. You may still retry,
+            use hints or read solutions. This is practice, not a secure test.
+          </p>
+          <p class="muted">Practice resets on reload. Only research notes are saved locally.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="research" hidden aria-labelledby="researchTitle">
+      <article class="card">
+        <span class="tag extra">RESEARCH CORNER / 小型探究</span>
+        <h2 id="researchTitle" tabindex="-1">Ask a question the pattern cannot answer for you</h2>
+        <p>Work alone or in pairs. Make a prediction first, collect several experiments,
+          and distinguish <strong>evidence</strong> from <strong>proof</strong>.</p>
+        <label for="project">Choose your investigation</label>
+        <select id="project">
+          <option value="fibonacci">A. Fibonacci ratios — beyond the S1 core</option>
+          <option value="collatz">B. Collatz journeys — mathematical research enrichment</option>
+        </select>
+      </article>
+
+      <div class="grid">
+        <article class="card">
+          <h3 id="projectTitle"></h3>
+          <p id="projectDescription"></p>
+          <div id="projectTasks" class="callout"></div>
+
+          <form id="researchForm">
+            <label id="researchInputLabel" for="researchInput"></label>
+            <div class="controls">
+              <div class="field">
+                <input id="researchInput" type="number" step="1" required>
+              </div>
+              <button type="submit">Run experiment</button>
+            </div>
+          </form>
+
+          <p id="researchSummary" class="feedback" role="status"></p>
+          <div class="visual">
+            <svg id="researchChart" viewBox="0 0 620 300" role="img" aria-label="Research graph"></svg>
+          </div>
+          <p id="researchChartNote" class="muted"></p>
+          <div id="researchTable" class="tablewrap"></div>
+
+          <div class="row" style="margin-top:15px">
+            <button id="captureRun">Add this run to evidence</button>
+            <button id="researchDownload" class="secondary">Download data (.csv)</button>
+          </div>
+
+          <details>
+            <summary>Research reading and an optional challenge</summary>
+            <div id="projectReading"></div>
+          </details>
+        </article>
+
+        <article class="card notebook">
+          <h3>My research notebook / 探究筆記</h3>
+          <p class="muted">Each project has a separate notebook. Use English or Chinese.
+            Do not enter names, student numbers or other personal information.</p>
+          <div id="notebookFields"></div>
+          <p id="storageStatus" role="status"></p>
+          <div class="row">
+            <button id="reportDownload">Download report (.txt)</button>
+            <button id="clearNotebook" class="danger">Clear this notebook</button>
+          </div>
+          <p class="muted">Download a backup before leaving a shared device.
+            Notes do not sync between browsers or devices, and are not sent to your teacher.</p>
+        </article>
+      </div>
+
+      <article class="card">
+        <h3>What makes a good mini-project?</h3>
+        <div class="tablewrap">
+          <table>
+            <caption>Suggested assessment: 8 marks in total</caption>
+            <thead><tr><th scope="col">Criterion</th><th scope="col">Evidence for 2 marks</th></tr></thead>
+            <tbody>
+              <tr><td>Question and prediction</td><td>A focused question and a reasoned prediction</td></tr>
+              <tr><td>Method and data</td><td>At least 3 organised experiments with recorded settings</td></tr>
+              <tr><td>Reasoning</td><td>A pattern explained using calculations or a counterexample</td></tr>
+              <tr><td>Communication</td><td>A clear conclusion, limitations and an acknowledged source</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>For each criterion: 0 = missing; 1 = partly achieved; 2 = clearly achieved.</p>
+      </article>
+    </section>
+  </main>
+
+  <details class="card">
+    <summary>Teacher guide / 教師使用建議</summary>
+    <p><strong>Suggested 40-minute lesson:</strong>
+      5 min vocabulary and noticing; 12 min visual missions; 10 min sequence lab;
+      8 min practice; 5 min exit discussion.</p>
+    <p><strong>Enrichment:</strong> Allocate another 25–40 minutes or a short home project.
+      Students download their reports and submit through your school's usual platform.</p>
+    <p><strong>Support:</strong> Start with even numbers. Say “position” and “value”
+      aloud. Use the first four pictures before showing notation.</p>
+    <p><strong>Stretch:</strong> Explain the triangular-number formula by arranging
+      two copies into a rectangle. Investigate geometric sums in the lab.</p>
+    <p><strong>Exit question:</strong> “A student says the next term of 2, 4, 6
+      must be 8. What assumption have they made?”</p>
+    <p><strong>Privacy:</strong> This app has no login, analytics or submission server.
+      Browser-local notebook storage is best-effort. Downloaded reports and CSV files
+      are the student's responsibility. External reading links require internet access.</p>
+    <p><strong>Vocabulary:</strong> sequence 數列 · term 項 · general term 通項 ·
+      common difference 公差 · common ratio 公比 · conjecture 猜想 · counterexample 反例.</p>
+    <p>Curriculum references:
+      <a href="https://www.edb.gov.hk/attachment/en/curriculum-development/kla/ma/curr/EN_KS3_e.pdf"
+        target="_blank" rel="noopener noreferrer">EDB junior secondary notes</a>;
+      <a href="https://www.edb.gov.hk/attachment/en/curriculum-development/kla/ma/curr/EN_CP_e.pdf"
+        target="_blank" rel="noopener noreferrer">EDB senior secondary compulsory-part notes</a>.
+      The school decides the teaching sequence and appropriate depth.</p>
+  </details>
+
+  <footer>
+    Sequence Studio · Designed for S1 exploration and enrichment.
+    Core activities run without external libraries. Research notes stay in this browser unless you download them.
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+const esc = value => String(value).replace(/[&<>"']/g,
+  ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const fmt = n => {
+  if (!Number.isFinite(n)) return "undefined";
+  if (Number.isInteger(n)) return String(n);
+  if (Math.abs(n) > 0 && Math.abs(n) < 0.000001) return n.toExponential(3);
+  return String(Number(n.toFixed(6)));
+};
+const rand = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
+
+function feedback(id,message,good=true) {
+  $(id).textContent=message;
+  $(id).className="feedback "+(good?"good":"bad");
+}
+
+function download(name,text,type="text/plain;charset=utf-8") {
+  const blob=new Blob([text],{type});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");
+  link.href=url;
+  link.download=name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+function csv(headers,rows) {
+  return [headers,...rows].map(row=>row.map(value=>
+    '"'+String(value).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+}
+
+function table(target,headers,rows,caption) {
+  $(target).innerHTML=`<table>
+    <caption>${esc(caption)}</caption>
+    <thead><tr>${headers.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(row=>`<tr>${row.map(cell=>`<td>${esc(cell)}</td>`).join("")}</tr>`).join("")}</tbody>
+  </table>`;
+}
+
+/* Accessible SVG charts. Matching tables contain the numerical data. */
+function chart(target,values,{start=1,yLabel="Term value",xLabel="Position n",title="Sequence graph"}={}) {
+  const svg=$(target);
+  const left=75,right=595,top=42,bottom=250;
+  const min=Math.min(0,...values), max=Math.max(1,...values);
+  const span=max-min || 1;
+  const x=i=>values.length===1 ? (left+right)/2 :
+    left+i*(right-left)/(values.length-1);
+  const y=v=>bottom-(v-min)*(bottom-top)/span;
+  let markup=`<title>${esc(title)}</title>
+    <desc>${esc(yLabel)} against ${esc(xLabel)}. Exact data appear in the table below.</desc>
+    <text x="12" y="20" font-size="13">${esc(yLabel)}</text>`;
+  for(let i=0;i<=4;i++){
+    const value=min+span*i/4, py=y(value);
+    const label=Math.abs(value)>=10000 ? value.toExponential(1) :
+      String(Number(value.toPrecision(4)));
+    markup+=`<line x1="${left}" y1="${py}" x2="${right}" y2="${py}" stroke="#d9e4e7"/>
+      <text x="${left-9}" y="${py+4}" font-size="12" text-anchor="end">${esc(label)}</text>`;
+  }
+  markup+=`<line x1="${left}" y1="${top}" x2="${left}" y2="${bottom}" stroke="#607880"/>
+    <line x1="${left}" y1="${y(0)}" x2="${right}" y2="${y(0)}" stroke="#607880"/>
+    <polyline points="${values.map((v,i)=>`${x(i)},${y(v)}`).join(" ")}"
+      fill="none" stroke="#087f80" stroke-width="2" opacity=".7"/>`;
+  const gap=Math.max(1,Math.ceil(values.length/10));
+  values.forEach((v,i)=>{
+    markup+=`<circle cx="${x(i)}" cy="${y(v)}" r="${values.length>80?2:4}"
+      fill="#087f80"><title>${esc(xLabel)} ${i+start}: ${esc(fmt(v))}</title></circle>`;
+    if(i%gap===0 || i===values.length-1){
+      markup+=`<text x="${x(i)}" y="${bottom+20}" font-size="12" text-anchor="middle">${i+start}</text>`;
+    }
+  });
+  markup+=`<text x="335" y="291" font-size="13" text-anchor="middle">${esc(xLabel)}</text>`;
+  svg.innerHTML=markup;
+  svg.setAttribute("aria-label",title+". "+yLabel+" against "+xLabel+". Data table follows.");
+}
+
+/* Navigation */
+document.querySelectorAll("nav button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll("nav button").forEach(b=>
+      b.setAttribute("aria-pressed",String(b===button)));
+    document.querySelectorAll("main > section").forEach(section=>
+      section.hidden=section.id!==button.dataset.page);
+    $(button.dataset.page+"Title").focus();
+  });
+});
+
+/* 1. Visual patterns */
+const patterns={
+  linear:{
+    term:n=>3*n+1, rule:"aₙ = 3n + 1",
+    explanation:"There are n columns of 3 tiles, plus 1 fixed tile. Each new team adds 3.",
+    name:"Tile teams"
+  },
+  odd:{
+    term:n=>2*n-1, rule:"aₙ = 2n − 1",
+    explanation:"The bottom row has n tiles and the top row has n − 1. Total: n + (n − 1). Each step adds 2.",
+    name:"Odd numbers"
+  },
+  even:{
+    term:n=>2*n, rule:"aₙ = 2n",
+    explanation:"There are n columns of 2 tiles. Each step adds another pair.",
+    name:"Even numbers"
+  },
+  square:{
+    term:n=>n*n, rule:"aₙ = n²",
+    explanation:"There are n rows of n tiles. The new border contains n + (n − 1) = 2n − 1 tiles.",
+    name:"Square numbers"
+  },
+  triangle:{
+    term:n=>n*(n+1)/2, rule:"aₙ = n(n + 1) / 2",
+    explanation:"The rows contain 1, 2, …, n tiles. Two copies can form an n by (n + 1) rectangle, so one copy has half as many tiles.",
+    name:"Triangular numbers"
+  }
+};
+
+function drawPattern() {
+  const kind=$("patternKind").value, p=patterns[kind], n=Number($("stage").value);
+  $("position").textContent=n;
+  $("tileCount").textContent=p.term(n);
+  $("previousStage").disabled=n===1;
+  $("nextStage").disabled=n===10;
+
+  const dots=[];
+  const add=(x,y,fresh)=>dots.push({x,y,fresh});
+  if(kind==="linear"){
+    add(0,1,n===1);
+    for(let c=1;c<=n;c++) for(let r=0;r<3;r++) add(c,r,c===n);
+  } else if(kind==="even"){
+    for(let c=0;c<n;c++) for(let r=0;r<2;r++) add(c,r,c===n-1);
+  } else if(kind==="odd"){
+    for(let c=0;c<n;c++) add(c,1,c===n-1);
+    for(let c=0;c<n-1;c++) add(c,0,c===n-2);
+  } else if(kind==="square"){
+    for(let r=0;r<n;r++) for(let c=0;c<n;c++) add(c,r,r===n-1 || c===n-1);
+  } else {
+    for(let r=0;r<n;r++) for(let c=0;c<=r;c++) add(c,r,r===n-1);
+  }
+
+  const maxX=Math.max(...dots.map(d=>d.x));
+  const maxY=Math.max(...dots.map(d=>d.y));
+  const step=Math.min(38,450/(maxX+1),250/(maxY+1));
+  const x0=(520-maxX*step)/2, y0=(310-maxY*step)/2;
+  const size=step*.72;
+  $("patternSvg").innerHTML=`<title>${esc(p.name)}, position ${n}: ${p.term(n)} tiles</title>`+
+    dots.map(d=>`<rect x="${x0+d.x*step-size/2}" y="${y0+d.y*step-size/2}"
+      width="${size}" height="${size}" rx="5"
+      fill="${d.fresh?"#f4af46":"#087f80"}"
+      stroke="${d.fresh?"#6b430a":"#056466"}" stroke-width="${d.fresh?2:1}"/>`).join("");
+  $("patternSvg").setAttribute("aria-label",`${p.name}, position ${n}, ${p.term(n)} tiles.`);
+  $("growthDescription").textContent=n===1 ?
+    `First picture: ${p.term(1)} tiles. There is no preceding picture in this activity.` :
+    `From position ${n-1} to ${n}: ${p.term(n-1)} + ${p.term(n)-p.term(n-1)} = ${p.term(n)}.`;
+  $("firstTerms").innerHTML=Array.from({length:5},(_,i)=>
+    `<div class="termchip"><small>n = ${i+1}</small><strong>${p.term(i+1)}</strong></div>`).join("");
+  $("patternRule").textContent=p.rule;
+  $("patternExplanation").textContent=p.explanation;
+  $("position20").textContent=`At position 20, a₂₀ = ${p.term(20)}.`;
+}
+
+$("stage").addEventListener("input",drawPattern);
+$("previousStage").onclick=()=>{ $("stage").value=Number($("stage").value)-1; drawPattern(); };
+$("nextStage").onclick=()=>{ $("stage").value=Number($("stage").value)+1; drawPattern(); };
+$("patternKind").onchange=()=>{
+  $("ruleDetails").open=false;
+  $("prediction").value="";
+  $("predictionFeedback").textContent="";
+  $("stage").value=4;
+  drawPattern();
+};
+$("predictionForm").onsubmit=event=>{
+  event.preventDefault();
+  const p=patterns[$("patternKind").value];
+  const good=Number($("prediction").value)===p.term(8);
+  feedback("predictionFeedback",good ?
+    "Correct! Now explain how the picture supports your calculation." :
+    "Not yet. Compare the first few pictures and count the new tiles. Then try again.",good);
+};
+
+/* 2. Sequence lab */
+let labExport={headers:[],rows:[]};
+
+function setLabMode() {
+  const geo=$("labMode").value==="geometric";
+  $("differenceField").hidden=geo;
+  $("difference").disabled=geo;
+  $("ratioField").hidden=!geo;
+  $("ratio").disabled=!geo;
+}
+function runLab() {
+  const geo=$("labMode").value==="geometric";
+  const a=Number($("firstTerm").value);
+  const k=Number($(geo?"ratio":"difference").value);
+  if(!Number.isInteger(a)||a<1||a>20) return;
+  const values=Array.from({length:10},(_,i)=>geo?a*k**i:a+i*k);
+  const rows=values.map((v,i)=>[
+    i+1,fmt(v),i===0?"—":fmt(geo?v/values[i-1]:v-values[i-1])
+  ]);
+  const headers=["Position n","Term a_n",geo?"Ratio to previous":"Difference from previous"];
+  $("labSummary").textContent=geo ?
+    `First term ${a}; multiply by ${k} each time. aₙ = ${a} × (${k})^(n − 1).` :
+    `First term ${a}; add ${k} each time. aₙ = ${a} + (n − 1) × (${k}).`;
+  chart("labChart",values,{title:geo?"Geometric sequence":"Arithmetic sequence"});
+  table("labTable",headers,rows,"First 10 terms (non-integers shown to up to 6 decimal places)");
+  $("labSum").textContent=`For this displayed experiment, S₁₀ = ${fmt(values.reduce((s,v)=>s+v,0))}.`;
+  labExport={
+    headers,
+    rows:values.map((v,i)=>[i+1,v,i===0?"":geo?v/values[i-1]:v-values[i-1]])
+  };
+}
+$("labMode").onchange=setLabMode;
+$("labForm").onsubmit=event=>{event.preventDefault();runLab();};
+$("labDownload").onclick=()=>download("sequence-lab.csv",
+  csv(labExport.headers,labExport.rows),"text/csv;charset=utf-8");
+
+/* 3. Practice: scoring is first submission only; retries remain available. */
+let questions=[],qIndex=0,firstCorrect=0,attempts=0,solved=false;
+
+function makeQuiz() {
+  const a=rand(2,9), d=rand(2,5);
+  const m=rand(2,5), b=rand(1,6), n=rand(5,10);
+  const index=rand(4,12), t=rand(4,8), c=rand(2,9);
+  const start=rand(15,25), drop=rand(2,5);
+  questions=[
+    {
+      prompt:`A sequence starts ${a}, ${a+d}, ${a+2*d}. The rule is “add ${d} each time”. What is the fourth term?`,
+      answer:a+3*d,
+      hint:"Move one more step from the third term.",
+      solution:`The fourth term is ${a+2*d} + ${d} = ${a+3*d}.`
+    },
+    {
+      prompt:`Given aₙ = ${m}n + ${b}, find a${n}.`,
+      answer:m*n+b,
+      hint:`Replace n with ${n}, then multiply before adding.`,
+      solution:`a${n} = ${m} × ${n} + ${b} = ${m*n+b}.`
+    },
+    {
+      prompt:`Given aₙ = 2n + 1, which position n has term value ${2*index+1}?`,
+      answer:index,
+      hint:"Subtract 1 from the term value, then divide by 2. You are finding a position.",
+      solution:`2n + 1 = ${2*index+1}, so n = (${2*index+1} − 1)/2 = ${index}.`
+    },
+    {
+      prompt:`Triangular numbers have aₙ = n(n + 1)/2. Find a${t}.`,
+      answer:t*(t+1)/2,
+      hint:"Substitute the position into both occurrences of n.",
+      solution:`a${t} = ${t} × ${t+1}/2 = ${t*(t+1)/2}.`
+    },
+    {
+      prompt:`A sequence has aₙ = 3n + c. Its first term is ${3+c}. What is c?`,
+      answer:c,
+      hint:"The first term uses n = 1, not n = 0.",
+      solution:`${3+c} = 3 × 1 + c, so c = ${c}.`
+    },
+    {
+      prompt:`An arithmetic sequence begins ${start}, ${start-drop}, ${start-2*drop}. What is its common difference?`,
+      answer:-drop,
+      hint:"Calculate second term minus first term. Include the sign.",
+      solution:`d = ${start-drop} − ${start} = ${-drop}.`
+    }
+  ];
+  qIndex=0; firstCorrect=0;
+  $("quizRestart").hidden=true;
+  $("quizNext").hidden=false;
+  $("quizForm").hidden=false;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  attempts=0; solved=false;
+  $("quizProgress").textContent=`Question ${qIndex+1} of ${questions.length} · First-submission correct: ${firstCorrect}`;
+  $("quizBar").value=qIndex;
+  $("quizQuestion").textContent=questions[qIndex].prompt;
+  $("quizAnswer").value="";
+  $("quizAnswer").disabled=false;
+  $("quizCheck").disabled=false;
+  $("quizReveal").disabled=false;
+  $("quizHint").disabled=false;
+  $("quizNext").disabled=true;
+  $("quizNext").textContent=qIndex===questions.length-1?"Finish practice":"Next question →";
+  $("quizFeedback").textContent="";
+  $("quizHintText").hidden=true;
+}
+function lockQuestion() {
+  solved=true;
+  $("quizAnswer").disabled=true;
+  $("quizCheck").disabled=true;
+  $("quizReveal").disabled=true;
+  $("quizNext").disabled=false;
+}
+
+$("quizForm").onsubmit=event=>{
+  event.preventDefault();
+  if(solved) return;
+  const correct=Number($("quizAnswer").value)===questions[qIndex].answer;
+  if(correct&&attempts===0) firstCorrect++;
+  attempts++;
+  if(correct){
+    feedback("quizFeedback","Correct. "+questions[qIndex].solution);
+    lockQuestion();
+  } else {
+    feedback("quizFeedback","Not yet. Check the position, operation and sign. You can try again.",false);
+  }
+};
+$("quizHint").onclick=()=>{
+  $("quizHintText").hidden=false;
+  $("quizHintText").textContent=questions[qIndex].hint;
+};
+$("quizReveal").onclick=()=>{
+  if(solved) return;
+  attempts++;
+  feedback("quizFeedback","Worked solution: "+questions[qIndex].solution);
+  lockQuestion();
+};
+$("quizNext").onclick=()=>{
+  if(!solved) return;
+  qIndex++;
+  if(qIndex===questions.length){
+    $("quizBar").value=questions.length;
+    $("quizProgress").textContent="Practice complete";
+    $("quizQuestion").textContent=`${firstCorrect} / ${questions.length} correct on the first submission`;
+    $("quizFeedback").textContent="Choose one question and explain its method to a partner. Hints were allowed; this is not an exam score.";
+    $("quizForm").hidden=true;
+    $("quizHintText").hidden=true;
+    $("quizNext").hidden=true;
+    $("quizRestart").hidden=false;
+  } else {
+    renderQuestion();
+    $("quizAnswer").focus();
+  }
+};
+$("quizRestart").onclick=makeQuiz;
+
+/* 4. Research */
+const projects={
+  fibonacci:{
+    title:"A. Can ratios settle down?",
+    description:"Begin with 1, 1. Each new term is the sum of the previous two. Study the ratio of a term to the preceding term.",
+    tasks:"Question: As you generate more Fibonacci terms, what happens to the consecutive-term ratios? Try 8, 16 and 24 terms. Record at least four ratios per run. Do they approach from just one side?",
+    label:"Number of terms (5–30)", min:5,max:30,value:12,
+    reading:`<p><a href="https://nrich.maths.org/articles/whirling-fibonacci-squares"
+      target="_blank" rel="noopener noreferrer">University of Cambridge NRICH: Whirling Fibonacci Squares</a></p>
+      <p>Our indexing is F₁ = 1 and F₂ = 1. Some sources start with F₀ = 0.</p>
+      <p>Optional senior challenge: If the ratios approach a positive number L,
+      explain why L = 1 + 1/L. Solve L² − L − 1 = 0.
+      This identifies a possible positive limit; assuming a limit exists is not a proof of convergence.</p>`
+  },
+  collatz:{
+    title:"B. Does a bigger start mean a longer journey?",
+    description:"Start with a positive integer. If it is even, divide by 2. If it is odd, multiply by 3 and add 1. Repeat. This tool stops when it reaches 1.",
+    tasks:"Question: Does a larger starting number always need more steps to reach 1? Predict first. Compare starts 6, 7, 8 and 27. Find a counterexample if possible. A step is one application of the rule; the starting value is step 0.",
+    label:"Starting integer (1–1,000,000)",min:1,max:1000000,value:6,
+    reading:`<p><a href="https://terrytao.wordpress.com/2019/09/10/almost-all-collatz-orbits-attain-almost-bounded-values/"
+      target="_blank" rel="noopener noreferrer">Terence Tao: research discussion of the Collatz conjecture</a>
+      — teacher-supported reading; the article is advanced.</p>
+      <p>The conjecture says every positive integer eventually reaches 1.
+      A finite collection of successful experiments does not prove that universal claim.</p>
+      <p>Optional challenge: Explain why powers of 2 reach 1. After reaching 1,
+      the untruncated rule would repeat 1 → 4 → 2 → 1.</p>`
+  }
+};
+
+const noteFields=[
+  ["question","1. Research question / 研究問題","What exactly will you investigate?"],
+  ["prediction","2. Prediction / 猜想","I predict… because…"],
+  ["method","3. Method / 方法","What settings will you test? What will you compare?"],
+  ["evidence","4. Evidence / 證據","Use “Add this run to evidence”, then describe what the data show."],
+  ["conclusion","5. Conclusion and limitations / 結論與限制","Was your prediction supported? What have you NOT proved?"],
+  ["sources","6. Sources / 參考資料","Record a source title, author or organisation, URL and what you learned."]
+];
+
+let currentProject="fibonacci";
+let researchExport={headers:[],rows:[],summary:"",setting:""};
+let notes={fibonacci:{},collatz:{}};
+const storageKey="sequence-studio-v1:"+location.pathname;
+let canStore=true;
+try{
+  const saved=JSON.parse(localStorage.getItem(storageKey)||"null");
+  if(saved&&typeof saved==="object"){
+    for(const projectId of Object.keys(notes)){
+      for(const [field] of noteFields){
+        if(typeof saved[projectId]?.[field]==="string")
+          notes[projectId][field]=saved[projectId][field];
+      }
+    }
+  }
+}catch(error){
+  canStore=false;
+}
+
+$("notebookFields").innerHTML=noteFields.map(([id,label,placeholder])=>
+  `<label for="note-${id}">${esc(label)}</label>
+   <textarea id="note-${id}" placeholder="${esc(placeholder)}"></textarea>`).join("");
+
+function storageMessage(message) {
+  $("storageStatus").textContent=message;
+}
+function saveNotes() {
+  noteFields.forEach(([id])=>notes[currentProject][id]=$("note-"+id).value);
+  try{
+    localStorage.setItem(storageKey,JSON.stringify(notes));
+    canStore=true;
+    storageMessage("Saved in this browser only. Download a report for a portable backup.");
+  }catch(error){
+    canStore=false;
+    storageMessage("Browser saving is unavailable. Notes remain in this page for now; download your report before leaving.");
+  }
+}
+function loadNotebook() {
+  noteFields.forEach(([id])=>$("note-"+id).value=notes[currentProject][id]||"");
+  storageMessage(canStore?
+    "Notebook storage is local to this browser. Download a backup before leaving.":
+    "Browser storage could not be read. Download your report before leaving.");
+}
+noteFields.forEach(([id])=>$("note-"+id).addEventListener("input",saveNotes));
+
+function setupProject() {
+  const p=projects[currentProject];
+  $("projectTitle").textContent=p.title;
+  $("projectDescription").textContent=p.description;
+  $("projectTasks").textContent=p.tasks;
+  $("projectReading").innerHTML=p.reading;
+  $("researchInputLabel").textContent=p.label;
+  $("researchInput").min=p.min;
+  $("researchInput").max=p.max;
+  $("researchInput").value=p.value;
+  loadNotebook();
+  runResearch();
+}
+function runResearch() {
+  const p=projects[currentProject], setting=Number($("researchInput").value);
+  if(!Number.isInteger(setting)||setting<p.min||setting>p.max) return;
+
+  let headers,rows,summary;
+  if(currentProject==="fibonacci"){
+    const terms=[1,1];
+    while(terms.length<setting) terms.push(terms.at(-1)+terms.at(-2));
+    headers=["Position n","F_n","F_n / F_(n-1)"];
+    rows=terms.map((v,i)=>[i+1,v,i===0?"":v/terms[i-1]]);
+    const ratios=rows.slice(1).map(row=>row[2]);
+    summary=`Generated ${setting} terms. Last term: ${terms.at(-1)}. Last ratio: ${fmt(ratios.at(-1))}.`;
+    chart("researchChart",ratios,{
+      start:2,yLabel:"Ratio F_n / F_(n-1)",xLabel:"Position n",
+      title:"Consecutive Fibonacci ratios"
+    });
+    $("researchChartNote").textContent="This graph shows ratios, not the Fibonacci term values. Ratios in the table are rounded to at most 6 decimal places.";
+  }else{
+    const terms=[setting];
+    let reason="Reached 1";
+    const maxSteps=500;
+    while(terms.at(-1)!==1 && terms.length-1<maxSteps){
+      const last=terms.at(-1);
+      const next=last%2===0?last/2:3*last+1;
+      if(!Number.isSafeInteger(next)){
+        reason="Stopped before exceeding exact integer precision";
+        break;
+      }
+      terms.push(next);
+    }
+    if(terms.at(-1)!==1 && reason==="Reached 1")
+      reason="Stopped at the 500-step safety limit";
+    headers=["Step (start = 0)","Value"];
+    rows=terms.map((v,i)=>[i,v]);
+    const reached=terms.at(-1)===1;
+    summary=`Start ${setting}. ${reason}. ${terms.length-1} steps recorded; maximum recorded value ${Math.max(...terms)}.`+
+      (reached?"":" A tool limit is not evidence that this start never reaches 1.");
+    chart("researchChart",terms,{
+      start:0,yLabel:"Value (linear scale)",xLabel:"Step",
+      title:"Collatz journey"
+    });
+    $("researchChartNote").textContent="The chart uses a linear vertical scale. Scales change with each run: compare the numerical step counts and maximum values, not only the shape.";
+  }
+  $("researchSummary").textContent=summary;
+  table("researchTable",headers,rows.map(row=>row.map(value=>
+    typeof value==="number"?fmt(value):value)),"Displayed experiment");
+  researchExport={
+    headers,rows,summary,
+    setting:`${p.label}: ${setting}`
+  };
+}
+
+$("project").onchange=()=>{
+  saveNotes();
+  currentProject=$("project").value;
+  setupProject();
+};
+$("researchForm").onsubmit=event=>{event.preventDefault();runResearch();};
+$("researchDownload").onclick=()=>download(currentProject+"-data.csv",
+  csv(researchExport.headers,researchExport.rows),"text/csv;charset=utf-8");
+
+$("captureRun").onclick=()=>{
+  const lines=[
+    researchExport.setting,
+    researchExport.summary,
+    researchExport.headers.join(" | "),
+    ...researchExport.rows.map(row=>row.map(value=>
+      typeof value==="number"?fmt(value):value).join(" | "))
+  ];
+  const field=$("note-evidence");
+  field.value+=(field.value?"\n\n":"")+lines.join("\n");
+  saveNotes();
+  storageMessage(canStore?"Run added to evidence and saved locally.":"Run added to evidence. Download a report: local saving is unavailable.");
+};
+$("reportDownload").onclick=()=>{
+  saveNotes();
+  const text=[
+    "SEQUENCE STUDIO — MINI RESEARCH REPORT",
+    projects[currentProject].title,
+    "",
+    ...noteFields.flatMap(([id,label])=>[label,notes[currentProject][id]||"(not completed)",""]),
+    "Reminder: experimental evidence alone does not prove a claim about every positive integer."
+  ].join("\n");
+  download(currentProject+"-report.txt",text);
+};
+$("clearNotebook").onclick=()=>{
+  if(!confirm("Clear this project's notebook on this browser? Download a backup first if needed.")) return;
+  noteFields.forEach(([id])=>$("note-"+id).value="");
+  saveNotes();
+};
+
+/* Initial state */
+drawPattern();
+setLabMode();
+runLab();
+makeQuiz();
+setupProject();
+</script>
+</body>
+</html>
